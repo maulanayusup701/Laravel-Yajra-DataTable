@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Yajra\DataTables\EloquentDataTable;
 
 class User extends Authenticatable
 {
@@ -43,5 +44,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getActionAttribute()
+    {
+        $editButton = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a>';
+        $deleteButton = '<a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+        return $editButton . ' ' . $deleteButton;
+    }
+
+    public function getDatatables()
+    { 
+
+        // $query = $this->newQuery();
+        // $datatable = new EloquentDataTable($query);
+
+        // return $datatable->addColumn('action', function ($user) {
+        //     return $user->action;
+        // })->rawColumns(['action']);
+
+        return (new EloquentDataTable ($this->newQuery()))
+        ->addColumn('action', function ($user) {
+            return $user->action;
+        })
+        ->rawColumns(['action']);
     }
 }
